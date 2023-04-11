@@ -1,43 +1,104 @@
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.attribute.PosixFilePermission;
-import java.nio.file.attribute.PosixFilePermissions;
-import java.util.Set;
+import java.io.*;
+import java.util.*;
 
-public class FileManager
-{
-    // Define file permissions as a set of PosixFilePermission Objects
-    private static final Set<PosixFilePermission> READ_ONLY = PosixFilePermissions.fromString("r--r--r--");
-    private static final Set<PosixFilePermission> READ_WRITE = PosixFilePermissions.fromString("rw-rw-rw-");
-    private static final Set<PosixFilePermission> EXECUTE_ONLY = PosixFilePermissions.fromString("--x--x--x");
+public class FileSystem {
+    private String currentDirectory;
+    private Map<String, File> files;
 
-
-    // Define a method to set file permissions for a specific file
-    public void setFilePermissions(String filename, Set<PosixFilePermission>permissions)
-    throws IOException
-    {
-        Path file = Paths.get(filename);
-        Files.setPosixFilePermissions(file,permissions);
-
+    public FileSystem() {
+        currentDirectory = "/";
+        files = new HashMap<String, File>();
     }
-    //Example Usage 
-    public static void main(String[] args)
-    {
-        FileManager fileManager = new FileManager();
 
-        try{
-            // Set the permissions of the file "myfile.txt" to READ_ONLY
-            fileManager.setFilePermissions("myfile.txt", READ_ONLY);
-            
-            // Set the permissions of the file "helloworld.sh" to EXECUTE_ONLY
-            fileManager.setFilePermissions("helloworld.sh", EXECUTE_ONLY);
-        }
-        catch(IOException e){
-            System.err.println("Error setting file permissions:" + e.getMessage());
+    public void changeDirectory(String newDirectory) {
+        if (newDirectory.startsWith("/")) {
+            currentDirectory = newDirectory;
+        } else {
+            currentDirectory += "/" + newDirectory;
         }
     }
 
-    
+    public String getCurrentDirectory() {
+        return currentDirectory;
+    }
+
+    public void createFile(String fileName, String content) {
+        File newFile = new File(fileName, content);
+        files.put(currentDirectory + "/" + fileName, newFile);
+    }
+
+    public void writeFile(String fileName, String content) {
+        String filePath = currentDirectory + "/" + fileName;
+        if (files.containsKey(filePath)) {
+            files.get(filePath).setContent(content);
+        } else {
+            System.out.println("Error: file does not exist.");
+        }
+    }
+
+    public void deleteFile(String fileName) {
+        String filePath = currentDirectory + "/" + fileName;
+        if (files.containsKey(filePath)) {
+            files.remove(filePath);
+        } else {
+            System.out.println("Error: file does not exist.");
+        }
+    }
+
+    public void listFiles() {
+        Set<String> fileNames = files.keySet();
+        for (String fileName : fileNames) {
+            if (fileName.startsWith(currentDirectory)) {
+                System.out.println(fileName.substring(currentDirectory.length() + 1));
+            }
+        }
+    }
+
+    public void readFile(String fileName) {
+        String filePath = currentDirectory + "/" + fileName;
+        if (files.containsKey(filePath)) {
+            System.out.println(files.get(filePath).getContent());
+        } else {
+            System.out.println("Error: file does not exist.");
+        }
+    }
+
+    public static void main(String[] args) {
+        FileSystem fs = new FileSystem();
+
+        fs.createFile("test.txt", "This is a test file.");
+        fs.changeDirectory("new_directory");
+        fs.createFile("test2.txt", "This is another test file.");
+        fs.changeDirectory("/");
+
+        fs.listFiles();
+        fs.readFile("test.txt");
+        fs.writeFile("test.txt", "This is the new content.");
+        fs.readFile("test.txt");
+        fs.deleteFile("test.txt");
+        fs.listFiles();
+    }
 }
+
+class File {
+    private String name;
+    private String content;
+
+    public File(String name, String content) {
+        this.name = name;
+        this.content = content;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String newContent) {
+        content = newContent;
+    }
+}
+
