@@ -84,7 +84,7 @@ void change_file_permissions(Directory* dir, char* filename, char* permissions) 
     printf("File not found.\n");
 }
 
-void change_file_ownership(Directory* dir, char* filename, char owner) 
+void change_file_ownership(Directory* dir, char* filename, char* owner) 
 {
     for (int i = 0; i < dir->num_files; i++) {
     if (strcmp(filename, dir->files[i].name) == 0)
