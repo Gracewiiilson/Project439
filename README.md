@@ -1,19 +1,16 @@
-# File Management System in C
-# COSC439/519 Spring 2023
-# Grace Wilson Byron Doyal Ivan Omorogbe
+File Management System in C
+COSC439/519 Spring 2023
+# Grace Wilson, Byron Doyal, Ivan Omorogbe.
+
 
 Dependencies needed for this program:
-
-ncurses
-download this from this website:
-https://invisible-island.net/ncurses/announce.html
-
-as well as fcntl if you do not have it
+-fcntl
+-ncurses
+   download this from this website:
+   https://invisible-island.net/ncurses/announce.html
 
 
-Required:
-
-Linux
+Required: Linux
 
 How to run the program:
 
@@ -23,7 +20,6 @@ How to run the program:
    "cc main main.c -lscurses"
    and then run 
    "./main"
-   
 5. have a look through the directories
 
 Contributions:
