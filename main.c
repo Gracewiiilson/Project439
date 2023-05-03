@@ -372,13 +372,13 @@ void delete_file(char *files[]) {
   int c;
   wclear(path_win);
   wmove(path_win, 1, 0);
-  wprintw(path_win, "Are you sure to delete? (y/n)");
+  wprintw(path_win, "Are you sure you want to delete? (y/n)");
 
 LOOP_:
   c = wgetch(path_win);
   wclear(path_win);
   wmove(path_win, 1, 0);
-  wprintw(path_win, "Are you sure to delete? (y/n) %c", c);
+  wprintw(path_win, "Are you sure you want to delete? (y/n) %c", c);
   switch (c) {
     case 'y':
     case 'Y':
@@ -524,7 +524,7 @@ void show_file_info(char *files[]) {
     wprintw(info_win, " No. Files: %zu\n",
             isDir(file_stats.st_mode) ? total_files : 1);
   } else {
-    wprintw(info_win, "Press Enter to go back\n");
+    wprintw(info_win, "Press the enter key to go back\n");
   }
 }
 
