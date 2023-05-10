@@ -492,7 +492,7 @@ float get_recursive_size_directory(char *path) {
         strcmp(dir_entry->d_name, "..") != 0) {
       snprintf(temp_path, sizeof(temp_path), "%s/%s", path, dir_entry->d_name);
       if (dir_entry->d_type != DT_DIR) {
-        stat(temp_path, &file_stat);
+        stat(temp_path, & file_stat);
         total_files++;
         directory_size += (float)(file_stat.st_size) / (float)1024;
 
