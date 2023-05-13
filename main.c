@@ -3,7 +3,6 @@
 #include <fcntl.h>   // incase its not already downloaded
 #include <limits.h>  // INT_MAX, etc...
 #include <locale.h>  // Locale
-#include <magic.h>
 #include <pwd.h>     //username & info
 #include <stdio.h>   //	i/o
 #include <stdlib.h>  //	std libs
@@ -392,7 +391,35 @@ LOOP_:
       break;
   }
 }
-
+void create_file(char *files[]){
+  char new_path[1000];
+  int i = 0, c;
+  wclear(path_win);
+  wmove(path_win, 1, 0);
+  while ((c = wgetch(path_win)) != '\n') {
+    if (c == 127 || c == 8) {
+      new_path[--i] = '\0';
+      i = i < 0 ? 0 : i;
+    } else {
+      new_path[i++] = c;
+      new_path[i] = '\0';
+    }
+    wclear(path_win);
+    wmove(path_win, 1, 0);
+    wprintw(path_win, "%s", new_path);
+    
+    FILE *new_file;
+    strcat(new_path, files[selection]);
+  char curr_path[1000];
+  snprintf(curr_path, sizeof(curr_path), "%s%s", current_directory_->cwd,
+           files[selection]);
+  new_file = fopen(curr_path, "w+");
+  wmove(current_win, 10, 10);
+  wprintw(current_win, "%.*s,%s", maxx, curr_path, new_path);
+  printf("%s %s", curr_path, new_path);
+  fclose(new_file);
+  }
+}
 void copy_files(char *files[]) {
   char new_path[1000];
   int i = 0, c;
@@ -600,6 +627,10 @@ int main() {
       case 'r':
       case 'R':
         rename_file(files);
+        break;
+      case 'n':
+      case 'N':
+        create_file(files);
         break;
       case 'c':
       case 'C':
