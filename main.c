@@ -391,39 +391,32 @@ LOOP_:
       break;
   }
 }
-void create_file(char *files[]){
-  char new_path[1000];
-  char new_file_name[1000];
+void create_file() {
+  char filename[1000];
   int i = 0, c;
   wclear(path_win);
   wmove(path_win, 1, 0);
   while ((c = wgetch(path_win)) != '\n') {
     if (c == 127 || c == 8) {
-      new_path[--i] = '\0';
+      filename[--i] = '\0';
       i = i < 0 ? 0 : i;
     } else {
-      new_path[i++] = c;
-      new_path[i] = '\0';
+      filename[i++] = c;
+      filename[i] = '\0';
     }
     wclear(path_win);
     wmove(path_win, 1, 0);
-    wprintw(path_win, "%s", new_path);
-    wprintw(path_win, "%s","give the name and extention of the file you wish to create:");
-    scanf("%s", new_file_name);
-
-    
-    FILE *new_file;
-    strcat(new_path, new_file_name);
-  char curr_path[1000];
-  snprintf(curr_path, sizeof(curr_path), "%s%s", current_directory_->cwd,
-           files[selection]);
-  new_file = fopen(curr_path, "w+");
-  wmove(current_win, 10, 10);
-  wprintw(current_win, "%.*s,%s", maxx, curr_path, new_path);
-  printf("%s %s", curr_path, new_path);
-  fclose(new_file);
+    wprintw(path_win, "%s", filename);
   }
+  FILE *new_file;
+  new_file = fopen(filename, "w");
+  if (new_file == NULL) {
+    perror("Error creating file");
+    return;
+  }
+  fclose(new_file);
 }
+
 void copy_files(char *files[]) {
   char new_path[1000];
   int i = 0, c;
@@ -470,8 +463,10 @@ void copy_files(char *files[]) {
 //*******************************************************************************////*******************************************************************************//
 
 void move_file(char *files[]) {
+  create_file(files);
   copy_files(files);
   delete_(files);
+  
 }
 
 void handle_enter(char *files[]) {
