@@ -393,6 +393,7 @@ LOOP_:
 }
 void create_file(char *files[]){
   char new_path[1000];
+  char new_file_name[1000];
   int i = 0, c;
   wclear(path_win);
   wmove(path_win, 1, 0);
@@ -407,9 +408,12 @@ void create_file(char *files[]){
     wclear(path_win);
     wmove(path_win, 1, 0);
     wprintw(path_win, "%s", new_path);
+    wprintw(path_win, "%s","give the name and extention of the file you wish to create:");
+    scanf("%s", new_file_name);
+
     
     FILE *new_file;
-    strcat(new_path, files[selection]);
+    strcat(new_path, new_file_name);
   char curr_path[1000];
   snprintf(curr_path, sizeof(curr_path), "%s%s", current_directory_->cwd,
            files[selection]);

@@ -17,6 +17,4 @@ typedef struct directory_ {
 
 #define KEY_NAVDOWN 'j'
 
-#define KEY_ENTER 10
-
 #endif
