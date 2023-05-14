@@ -391,7 +391,7 @@ LOOP_:
       break;
   }
 }
-void create_file() {
+void create_file(char *files[]) {
   char filename[1000];
   int i = 0, c;
   wclear(path_win);
